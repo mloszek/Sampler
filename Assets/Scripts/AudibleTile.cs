@@ -15,6 +15,7 @@ public class AudibleTile : MonoBehaviour {
 
     private bool alreadySwitched;
     private Color tileDefaultColor = Color.white;
+    private PlayHandler playHandler;
 
     public bool IsActive { get; set; }
 
@@ -23,6 +24,16 @@ public class AudibleTile : MonoBehaviour {
         alreadySwitched = false;
         tileDefaultColor.a = 0.5f;
         spriteRenderer.color = tileDefaultColor;
+    }
+
+    public void SubscribeForPlayEvent(PlayHandler playHandler)
+    {
+        if (playHandler != null)
+        {
+            this.playHandler = playHandler;
+            this.playHandler.OnPlay -= Play;
+            this.playHandler.OnPlay += Play;
+        }
     }
 
     public void SetComponentsActive(bool activity)
@@ -45,8 +56,22 @@ public class AudibleTile : MonoBehaviour {
         }
     }
 
+    private void Play()
+    {
+        if (IsActive)
+        {
+            animator.Play("Play");
+            audioSource.Play();
+        }
+    }
+
     public void ResetSwitch()
     {
         alreadySwitched = false;
+    }
+
+    private void OnApplicationQuit()
+    {
+        playHandler.OnPlay -= Play;
     }
 }

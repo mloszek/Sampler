@@ -8,10 +8,10 @@ public class MainController : MonoBehaviour
     private TilesDatabase tilesDatabase;
 
     [SerializeField]
-    private float speed =  0.125f;
+    private float speed = 0.125f;
 
+    private Dictionary<int, PlayHandler> playDict;
     private Coroutine rollCoroutine;
-
     private int index;
 
     private void Start()
@@ -20,6 +20,9 @@ public class MainController : MonoBehaviour
 
         if (tilesDatabase != null)
             tilesDatabase.Fill();
+
+        playDict = new Dictionary<int, PlayHandler>();
+        SubscribeTilesForPlayEvent();
 
         if (rollCoroutine != null)
         {
@@ -30,11 +33,26 @@ public class MainController : MonoBehaviour
         rollCoroutine = StartCoroutine(RollTheMusic());
     }
 
+    private void SubscribeTilesForPlayEvent()
+    {
+        List<TilesColumn> tilesColumns = tilesDatabase.GetTilesColumns();
+
+        for (int i = 0; i < tilesColumns.Count; i++)
+        {
+            playDict.Add(i, new PlayHandler());
+
+            foreach (AudibleTile tile in tilesColumns[i].tiles)
+            {
+                tile.SubscribeForPlayEvent(playDict[i]);
+            }
+        }
+    }
+
     private IEnumerator RollTheMusic()
     {
         yield return new WaitForSeconds(speed);
 
-        Interact(tilesDatabase.GetTilesColumns()[HandleIndex()]);
+        playDict[HandleIndex()].PlayTiles();
         index++;
 
         rollCoroutine = StartCoroutine(RollTheMusic());
@@ -48,17 +66,5 @@ public class MainController : MonoBehaviour
         }
 
         return index;
-    }
-
-    private void Interact(TilesColumn tilesColumn)
-    {
-        foreach (AudibleTile tile in tilesColumn.tiles)
-        {
-            if (tile.IsActive)
-            {
-                tile.gameObject.GetComponent<Animator>().Play("Play");
-                tile.gameObject.GetComponent<AudioSource>().Play();
-            }
-        }
     }
 }
