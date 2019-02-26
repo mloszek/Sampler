@@ -8,6 +8,9 @@ public class MainController : MonoBehaviour
     private TilesDatabase tilesDatabase;
 
     [SerializeField]
+    private SoundController soundController;
+
+    [SerializeField]
     private float speed = 0.125f;
 
     private Dictionary<int, PlayHandler> playDict;
@@ -19,7 +22,7 @@ public class MainController : MonoBehaviour
         index = 0;
 
         if (tilesDatabase != null)
-            tilesDatabase.Fill();
+            tilesDatabase.Fill(soundController);
 
         playDict = new Dictionary<int, PlayHandler>();
         SubscribeTilesForPlayEvent();
@@ -50,12 +53,13 @@ public class MainController : MonoBehaviour
 
     private IEnumerator RollTheMusic()
     {
-        yield return new WaitForSeconds(speed);
+        while (true)
+        {
+            yield return new WaitForSeconds(speed);
 
-        playDict[HandleIndex()].PlayTiles();
-        index++;
-
-        rollCoroutine = StartCoroutine(RollTheMusic());
+            playDict[HandleIndex()].PlayTiles();
+            index++;
+        }
     }
 
     private int HandleIndex()
@@ -66,5 +70,11 @@ public class MainController : MonoBehaviour
         }
 
         return index;
+    }
+
+    private void OnDestroy()
+    {
+        StopCoroutine(RollTheMusic());
+        rollCoroutine = null;
     }
 }

@@ -8,10 +8,9 @@ public class AudibleTile : MonoBehaviour {
     private Animator animator;
 
     [SerializeField]
-    private AudioSource audioSource;
-
-    [SerializeField]
     private SpriteRenderer spriteRenderer;
+
+    private AudioSource audioSource;
 
     private bool alreadySwitched;
     private Color tileDefaultColor = Color.white;
@@ -34,6 +33,11 @@ public class AudibleTile : MonoBehaviour {
             this.playHandler.OnPlay -= Play;
             this.playHandler.OnPlay += Play;
         }
+    }
+
+    public void SetAudioSource(AudioSource audioSource)
+    {
+        this.audioSource = audioSource;
     }
 
     public void SetComponentsActive(bool activity)

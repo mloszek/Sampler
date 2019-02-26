@@ -16,7 +16,6 @@ public class TilesDatabase : MonoBehaviour
     [SerializeField]
     private List<TilesColumn> tilesColumns;
 
-
     public List<TilesColumn> GetTilesColumns()
     {
         if (tilesColumns != null)
@@ -25,25 +24,27 @@ public class TilesDatabase : MonoBehaviour
         return new List<TilesColumn>();
     }
 
-    public void Fill()
+    public void Fill(SoundController soundController)
     {
         TilesColumn column;
-        int k = 0;
+        GameObject currentTile;
+        AudibleTile audioComponent;
 
         for (int i = 0; i < 16; i++)
         {
-            column = new TilesColumn();
-            column.tiles = new List<AudibleTile>();
+            column = new TilesColumn
+            {
+                tiles = new List<AudibleTile>()
+            };
 
             for (int j = 0; j < 16; j++)
             {
-                GameObject currentTile = Instantiate(audibleTile, new Vector3(i * 0.4f, j * 0.4f, 0), Quaternion.identity, gameObject.transform);
-                currentTile.GetComponent<AudioSource>().clip = notes[j];
-                column.tiles.Add(currentTile.GetComponent<AudibleTile>());
+                currentTile = Instantiate(audibleTile, new Vector3(i * 0.4f, j * 0.4f, 0), Quaternion.identity, gameObject.transform);
+                audioComponent = currentTile.GetComponent<AudibleTile>();
+                audioComponent.SetAudioSource(soundController.GetAudioSource(j));
+                column.tiles.Add(audioComponent);
                 if (inputController != null)
                     inputController.SubscribeForMouseUp(currentTile.GetComponent<AudibleTile>());
-
-                k++;
             }
             tilesColumns.Add(column);
         }
