@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AudibleTile : MonoBehaviour {
+public class AudibleTile : MonoBehaviour
+{
 
     [SerializeField]
     private Animator animator;
@@ -14,7 +15,6 @@ public class AudibleTile : MonoBehaviour {
 
     private bool alreadySwitched;
     private Color tileDefaultColor = Color.white;
-    private PlayHandler playHandler;
 
     public bool IsActive { get; set; }
 
@@ -27,12 +27,8 @@ public class AudibleTile : MonoBehaviour {
 
     public void SubscribeForPlayEvent(PlayHandler playHandler)
     {
-        if (playHandler != null)
-        {
-            this.playHandler = playHandler;
-            this.playHandler.OnPlay -= Play;
-            this.playHandler.OnPlay += Play;
-        }
+        playHandler.OnPlay -= Play;
+        playHandler.OnPlay += Play;
     }
 
     public void SetAudioSource(AudioSource audioSource)
@@ -72,10 +68,5 @@ public class AudibleTile : MonoBehaviour {
     public void ResetSwitch()
     {
         alreadySwitched = false;
-    }
-
-    private void OnApplicationQuit()
-    {
-        playHandler.OnPlay -= Play;
     }
 }
