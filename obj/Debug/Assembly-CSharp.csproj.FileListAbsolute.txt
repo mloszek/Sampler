@@ -354,3 +354,5 @@ C:\Users\PC COMPUTER\Documents\Sampler\obj\Debug\Assembly-CSharp.csproj.CoreComp
 C:\Users\PC COMPUTER\Documents\Sampler\obj\Debug\Assembly-CSharp.csproj.CopyComplete
 C:\Users\PC COMPUTER\Documents\Sampler\obj\Debug\Assembly-CSharp.dll
 C:\Users\PC COMPUTER\Documents\Sampler\obj\Debug\Assembly-CSharp.pdb
+C:\Users\PC COMPUTER\Documents\Sampler\Temp\bin\Debug\Vuforia.UnityExtensions.dll
+C:\Users\PC COMPUTER\Documents\Sampler\Temp\bin\Debug\Vuforia.UnityExtensions.xml

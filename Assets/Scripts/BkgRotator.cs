@@ -5,10 +5,22 @@ using UnityEngine;
 public class BkgRotator : MonoBehaviour
 {
     [SerializeField]
+    private Material material;
+    [SerializeField]
     private float speed;
+
+    private Vector2 offset;
+
+    private void Start()
+    {
+        offset = material.mainTextureOffset;
+        material.mainTextureOffset = Vector2.zero;
+    }
 
     void Update()
     {
-        transform.Rotate(Vector3.back * Time.deltaTime * speed);
+        offset.x -= Time.deltaTime * speed;
+        offset.y += Time.deltaTime * speed;
+        material.mainTextureOffset = offset;
     }
 }
